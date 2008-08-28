@@ -5,11 +5,12 @@
  *
  * API is in alpha - so don't rely on it
  *
- * PHP4 and PHP5
+ * PHP5
  *
- * Usage:
- * $aws = new Services_AddressWebService;
+ * <code>
+ * $aws = new Services_AddressWebService; 
  * print_r($aws->query('Kirketorvet', 2, 'Tranbjerg J'));
+ * </code>
  *
  * @package Services_AddressWebService
  * @author  Lars Olesen <lars@legestue.net>
@@ -18,19 +19,17 @@
  * @license Share-Alike
  * @link    http://aws.oio.dk/
  */
-
-require_once 'nusoap/nusoap.php';
-
-class Services_AddressWebService {
-
-    var $options = array(
+class Services_AddressWebService 
+{
+    private $options = array(
         'trace' => 1,
         'exceptions' => 1
     );
 
-    var $client;
+    private $client;
 
-    function Services_AddressWebService($url = 'http://rep.oio.dk/altforintet_dk/findaddressservice.wsdl') {
+    function __construct($url = 'http://rep.oio.dk/altforintet_dk/findaddressservice.wsdl') 
+    {
         $this->client = new SoapClient(
             $url,
             $this->options
@@ -42,8 +41,8 @@ class Services_AddressWebService {
      * @param integer $number
      * @param string  $district
      */
-
-    function query($address, $number, $district) {
+    function query($address, $number, $district) 
+    {
         $district = array(
             'DistrictName' => $district,
             'InluceNeighbour' => true
@@ -56,7 +55,7 @@ class Services_AddressWebService {
             )
         );
 
-        $result = $this->client->call('FindAddressAccess', $params);
+        $result = $this->client->__soapCall('FindAddressAccess', $params);
 
         return $result;
     }
@@ -65,5 +64,3 @@ class Services_AddressWebService {
 
 $aws = new Services_AddressWebService;
 print_r($aws->query('Kirketorvet', 2, 'Tranbjerg J'));
-
-?>
